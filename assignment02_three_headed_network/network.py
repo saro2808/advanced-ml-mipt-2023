@@ -13,12 +13,10 @@ class ThreeInputsNet(nn.Module):
     def __init__(self, n_tokens, n_cat_features, concat_number_of_features, hid_size=64):
         super(ThreeInputsNet, self).__init__()
         self.title_emb = nn.Embedding(n_tokens, embedding_dim=hid_size)
-        # <YOUR CODE HERE>        
         
         self.full_emb = nn.Embedding(num_embeddings=n_tokens, embedding_dim=hid_size)
-        # <YOUR CODE HERE>
         
-        self.category_out = nn.Embedding(num_embeddings=n_cat_features, embedding_dim=hid_size)# <YOUR CODE HERE>
+        self.category_out = nn.Embedding(num_embeddings=n_cat_features, embedding_dim=hid_size)
 
 
         # Example for the final layers (after the concatenation)
@@ -30,12 +28,12 @@ class ThreeInputsNet(nn.Module):
     def forward(self, whole_input):
         input1, input2, input3 = whole_input
         title_beg = self.title_emb(input1).permute((0, 2, 1))
-        title = title_beg.contiguous() # <YOUR CODE HERE>
+        title = title_beg.contiguous()
 
         full_beg = self.full_emb(input2).permute((0, 2, 1))
-        full = full_beg.contiguous() # <YOUR CODE HERE>        
+        full = full_beg.contiguous()   
         
-        category = self.category_out(input3).permute((0, 2, 1)).contiguous() # <YOUR CODE HERE>
+        category = self.category_out(input3).permute((0, 2, 1)).contiguous()
         concatenated = torch.cat(
             [
             title.view(title.size(0), -1),
@@ -44,7 +42,7 @@ class ThreeInputsNet(nn.Module):
             ],
             dim=1)
         
-        out = self.inter_dense(concatenated) # <YOUR CODE HERE>
+        out = self.inter_dense(concatenated)
         out = self.final_dense(out)
 
         return out
